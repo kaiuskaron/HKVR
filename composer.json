@@ -1,5 +1,13 @@
 {
-    "require": {
-        "vlucas/phpdotenv": "^5.4"
+  "config": {
+    "platform": {
+      "php": "7.3"
     }
+  },
+  "require": {
+    "vlucas/phpdotenv": "^5.4",
+    "jasongrimes/paginator": "~1.0",
+    "ext-pdo": "*",
+    "nesbot/carbon": "^2.57"
+  }
 }

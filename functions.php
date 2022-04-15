@@ -33,11 +33,25 @@ class NewsItem
 class RifNews
 {
 
-    public $db;
-    public $db_error;
+    private $db;
+    public $dbError;
+    public $currentPage;
+    public $ttlNewsCount;
+    public $sort;
 
     public function __construct() {
-        $this->db_error = '';
+        $this->dbError = '';
+        if (isset($_GET['page'])) {
+            $this->currentPage = intval($_GET['page']);
+        } else {
+            $this->currentPage = 1;
+        }
+        if (isset($_GET['sort'])) {
+            $this->sort = intval($_GET['sort']);
+        } else {
+            $this->sort = 0;
+        }
+
     }
 
     /**
@@ -47,47 +61,81 @@ class RifNews
         try {
             $this->db = new PDO("mysql:host=localhost;dbname=" . $_ENV['DB_DATABASE'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE); // fix limit binding
+            //$this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE); // fix limit binding
+            $this->ttlNewsCount = $this->_ttlNewsCount();
             return true;
         } catch (PDOException $e) {
-            $this->db_error = $e->getMessage();
+            $this->dbError = $e->getMessage();
             return false;
         }
     }
 
     /**
      * @param NewsItem $data
-     * @return bool
+     * @return bool|null
      */
-    public function insert(NewsItem $data): bool {
-        if (!$this->db_error) {
+    public function insert(NewsItem $data): ?bool {
+        $uploadDir = 'uploads/';
+        $uploadFile = null;
+        if (isset($_FILES) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+            $uploadFile = $uploadDir . basename($_FILES['file']['name']);
+            if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
+                $uploadFile = null;
+            }
+        }
+        if (!$this->dbError) {
             if ($data->expires == '') {
                 $data->expires = null;
             }
-            $sql = "INSERT INTO uudised (header, body, expires, user_id) VALUES (?,?,?,?)";
+            $sql = "INSERT INTO uudised (header, body, expires, user_id, image) VALUES (?,?,?,?,?)";
             $stmt = $this->db->prepare($sql);
-            return $stmt->execute([$data->header, $data->body, $data->expires, $data->user_id]);
+            return $stmt->execute([$data->header, $data->body, $data->expires, $data->user_id, $uploadFile]) ? 1 : -1;
         }
-        return false;
+        return null;
     }
 
     /**
-     * @param string $orderBy
-     * @param string $orderDir
+     * @param int $sort
      * @param int $take
-     * @param int $skip
      * @return mixed
      */
-    public function fetch(string $orderBy = 'id', string $orderDir = 'DESC', int $take = 5, int $skip = 0) {
-        $sql = 'select * from uudised where not deleted order by :ord ' . $orderDir . ' limit :take offset :skip';
+    public function fetch(int $take = 5) {
+        if ($this->currentPage < 2) {
+            $skip = 0;
+        } else {
+            $skip = ($this->currentPage - 1) * $take;
+        }
+        switch ($this->sort) {
+            case 1:
+                $orderBy = 'created';
+                $orderDir = 'desc';
+                break;
+            case 2:
+                $orderBy = 'created';
+                $orderDir = 'asc';
+                break;
+            case 3:
+                $orderBy = 'header';
+                $orderDir = 'asc';
+                break;
+            default:
+                $orderBy = 'id';
+                $orderDir = 'desc';
+                break;
+        }
+        $sql = 'select * from uudised where not deleted order by ' . $orderBy . ' ' . $orderDir . ' limit '.$take.' offset '.$skip;
         $sth = $this->db->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
-        $sth->execute([
-            ':ord'  => $orderBy,
-            ':take' => $take,
-            ':skip' => $skip
-        ]);
+        $sth->execute();
         return $sth->fetchAll(PDO::FETCH_CLASS, 'NewsItem');
     }
 
-
+    /**
+     * @return mixed
+     */
+    private function _ttlNewsCount() {
+        $sql = 'select count(id) from uudised where not deleted';
+        $sth = $this->db->prepare($sql);
+        $sth->execute();
+        return $sth->fetchColumn();
+    }
 }

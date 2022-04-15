@@ -155,7 +155,7 @@ blockquote p {
   Buttons 
 ********************************************************* */
 
-.btn {
+.btn, ::file-selector-button {
     position: relative;
     display: inline-block;
     margin: .8em 0;
@@ -167,6 +167,10 @@ blockquote p {
     -moz-border-radius: 30px;
     border-radius: 30px;
     background: #1abc9c;
+}
+
+::file-selector-button {
+    margin: .8em;
 }
 
 .btn:hover, .btn:focus, .btn-current {
@@ -214,15 +218,17 @@ blockquote p {
 ********************************************************* */
 
 #top-header {
-    position: fixed;
-    z-index: 1000;
+    /*position: fixed;
+    z-index: 1000;*/
     width: 100%;
     padding: 23px 0;
+    margin-bottom: 3rem;
     /*transition*/
     -webkit-transition: all .15s linear;
     -moz-transition: all .15s linear;
     -o-transition: all .15s linear;
     transition: all .15s linear;
+    background-color: #2C2D31;
 }
 
 #top-header .grid {
@@ -232,12 +238,15 @@ blockquote p {
 .logo {
     display: block;
     float: left;
-    width: 104px;
+    /*width: 104px;
     height: 46px;
     text-indent: -9999px;
-    /*background: url(images/logo.svg) no-repeat;*/
-    background-size: 104px 46px;
+    /*background: url(images/logo.svg) no-repeat;
+    background-size: 104px 46px;*/
+    color: white;
+    font-size: 2rem;
 }
+
 
 .header-default {
     background: #2C2D31;
@@ -338,38 +347,6 @@ blockquote p {
 .navigation li:hover > ul {
     visibility: visible;
     opacity: 1;
-}
-
-/* *********************************************************
-  Home Slider 
-********************************************************* */
-
-.top-slider .content-header {
-    padding: 130px 0;
-}
-
-.parallax-section .content h2,
-.content-header h2,
-.parallax-section .content h3,
-.content-header h3 {
-    color: #fff;
-}
-
-.parallax-section h2 > span,
-.parallax-section h3 > span,
-.content-header h2 > span,
-.content-header h3 > span {
-    background: #fff;
-}
-
-.parallax-section .content h2, .content-header h2 {
-    font-size: 2.5em;
-}
-
-.parallax-section .content p, .top-slider .content-header p, .home-slider .content p {
-    width: 70%;
-    margin: 0 auto 30px auto;
-    color: #fff;
 }
 
 /* *********************************************************
@@ -575,7 +552,7 @@ blockquote p {
 
 .post-wrap .post-meta {
     font-size: .8em;
-    margin-bottom: 1.5em;
+    margin: 1.5em 0;
     color:  #1abc9c;
 }
 
@@ -647,6 +624,50 @@ blockquote p {
 .blog-grid .post-wrap .entry-title {
     font-size: 1.2em;
     margin-top: 1em;
+}
+
+.alert {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.alert-success {
+    color: #1abc9c;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+}
+
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.filter {
+    float: right;
+    margin-bottom: 1rem;
+}
+
+.form-select {
+    /*padding: 0.375rem 2.25rem 0.375rem 0.75rem;*/
+    -moz-padding-start: calc(0.75rem - 3px);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    /*border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;*/
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-select:focus-visible {
+    outline: #badbcc auto 1px;
 }
 
 /* *********************************************************
@@ -926,7 +947,7 @@ ul.nested-comments ul li {
 
 /* Inputs */
 
-input:not([type=submit]):not([type=file]), textarea {
+input:not([type=submit]), textarea, select {
     width: 100% !important;
     height: 50px;
     margin-bottom: 25px;
@@ -974,7 +995,7 @@ textarea {
     margin-top: 3em;
 }
 
-input:not([type=submit]):not([type=file]):focus, textarea:focus {
+input:not([type=submit]):not([type=file]):focus, textarea:focus, select:focus {
     -webkit-animation: rubberBand 0.5s 1;
     -moz-animation: rubberBand 0.5s 1;
     -o-animation: rubberBand 0.5s 1;
@@ -1234,20 +1255,38 @@ footer p, footer a {
     -webkit-animation-delay: 1.2s;
 }
 
-@-webkit-keyframes subtleIn {
-    0% {
-        opacity: 0;
-        -webkit-transform: translateY(300%);
-        transform: translateY(300%);
-    }
-
-    30% {
-        opacity: 1;
-        -webkit-transform: translateY(0);
-        transform: translateY(0);
-    }
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    box-sizing: border-box;
 }
 
+.pagination li a {
+    padding: 0.375rem 0.75rem;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.pagination li:first-child a {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.pagination li:last-child a {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.pagination li.active a {
+    color: white;
+    background-color: #1abc9c;
+    border: 1px solid #1abc9c;
+}
 /*------------------------------------------------------------- 
   Media queries
 ---------------------------------------------------------------*/
@@ -1278,7 +1317,7 @@ footer p, footer a {
 
 @media handheld, only screen and (max-width: 767px) {
     #top-header {
-        position: absolute;
+        /*position: absolute;*/
         padding: 8px 0;
     }
 
