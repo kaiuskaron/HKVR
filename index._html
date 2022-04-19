@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="utf-8">
+    <title>Kaius Karon VR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Parim veebileht, mis siiani nähtud">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<header>
+    <nav>
+        <div class="navbar">
+            <ul>
+                <li><a href="index.html">Link1</a></li>
+                <li><a href="index.html">Link2</a></li>
+                <li><a href="index.html">Link3</a></li>
+                <li><a href="index.html">Link4</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main>
+    <section class="first-section">
+        <div class="container">
+            <div class="head">
+                <h1>Seni parim leht</h1>
+                <h2 class="text-primary">Parima lehe slogan!</h2>
+                <div>
+                    <a href="#" class="button">Osta kohe!</a>
+                    <a href="#" class="button">Liitu kohe!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="second-section">
+        <div class="container">
+            <h2 class="text-primary text-center">Osta meilt neid häid asju!</h2>
+            <div class="selling-items">
+            <div class="selling-item">
+                <div class="selling-head">
+                    <h3>Asi nr1</h3>
+                    <p>Argument #1</p>
+                </div>
+                <div class="price">
+                    <h4>27&euro;</h4>
+                    <p>kuus</p>
+                </div>
+                <div class="selling-body">
+                    <ul>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                    </ul>
+                    <a class="button btn-black" href="details.html">Osta</a>
+                </div>
+            </div>
+            <div class="selling-item">
+                <div class="selling-head">
+                    <h3>Asi nr2</h3>
+                    <p>Argument #2</p>
+                </div>
+                <div class="price">
+                    <h4>27&euro;</h4>
+                    <p>kuus</p>
+                </div>
+                <div class="selling-body">
+                    <ul>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                    </ul>
+                    <a class="button btn-black" href="details.html">Osta</a>
+                </div>
+            </div>
+            <div class="selling-item featured">
+                <div class="selling-head">
+                    <h3>Asi nr3</h3>
+                    <p>Argument #3</p>
+                    <span class="best-seller">Enim ostetud</span>
+                </div>
+                <div class="price">
+                    <h4>62&euro;</h4>
+                    <p>kuus</p>
+                </div>
+                <div class="selling-body">
+                    <ul>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                    </ul>
+                    <a class="button btn-primary" href="details.html">Osta</a>
+                </div>
+            </div>
+            <div class="selling-item">
+                <div class="selling-head">
+                    <h3>Asi nr4</h3>
+                    <p>Argument #4</p>
+                </div>
+                <div class="price">
+                    <h4>42&euro;</h4>
+                    <p>kuus</p>
+                </div>
+                <div class="selling-body">
+                    <ul>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                        <li>omadus</li>
+                    </ul>
+                    <a class="button btn-black" href="details.html">Osta</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer>
+    <div class="container">
+        <nav>
+            <div class="navbar">
+                <ul>
+                    <li>&copy; Kaius Karon</li>
+                    <li><a href="#" class="text-white">Link1</a></li>
+                    <li><a href="#" class="text-white">Link2</a></li>
+                    <li><a href="#" class="text-white">Link3</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</footer>
+</body>
+</html>
