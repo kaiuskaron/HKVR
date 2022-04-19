@@ -52,11 +52,7 @@
     include 'functions.php';
     const NEWS_PER_PAGE = 4;
 
-    $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
-    $dotenv->load();
-
     $news = new RifNews();
-    $stat = $news->connectDb();
     // todo error handling
 
     if (!empty($_POST)) {
@@ -125,14 +121,15 @@
                         <div class="col-1-2">
                             <article class="post-wrap">
                                 <div class="post-img">
-                                    <img src="https://picsum.photos/300/200?random=<?= $index ?>"
-                                         alt="website template image">
+                                    <?php if ($item->image) { ?>
+                                    <img src="<?= $item->image ?>"
+                                         alt="<?= $item->header ?>">
+                                    <?php } ?>
                                 </div>
                                 <div class="post">
                                     <h2 class="entry-title">
                                         <?= $item->header; ?>
                                     </h2>
-
                                     <p><?= $item->excerpt(); ?></p>
                                     <div class="post-meta">
                                         <div class="box-icon">
@@ -140,9 +137,8 @@
                                         </div>
                                         <p>Lisatud:</p>
                                         <p><?= Carbon::parse($item->created)->locale('et')->diffForHumans();?></p>
-                                        <!--?= $item->created; ?><span class="mid-sep">·</span> $item->user_id; ?!-->
                                     </div>
-                                    <a class="btn read-more" href="#">Loe edasi</a></div>
+                                    <a class="btn read-more" href="article.php?id=<?= $item->id ?>">Loe edasi</a></div>
                             </article>
                         </div>
                     <?php }

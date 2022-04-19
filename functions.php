@@ -1,4 +1,6 @@
 <?php
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
+$dotenv->load();
 
 class NewsItem
 {
@@ -8,6 +10,7 @@ class NewsItem
     public $created = '';
     public $deleted = false;
     public $user_id = 0;
+    public $image = '';
 
     public function __construct(array $array = null) {
         if ($array) {
@@ -32,7 +35,6 @@ class NewsItem
 
 class RifNews
 {
-
     private $db;
     public $dbError;
     public $currentPage;
@@ -41,6 +43,7 @@ class RifNews
 
     public function __construct() {
         $this->dbError = '';
+        $this->connectDb();
         if (isset($_GET['page'])) {
             $this->currentPage = intval($_GET['page']);
         } else {
@@ -55,18 +58,17 @@ class RifNews
     }
 
     /**
-     * @return bool
+     * @return void
      */
-    public function connectDb(): bool {
+    private function connectDb(): void {
         try {
             $this->db = new PDO("mysql:host=localhost;dbname=" . $_ENV['DB_DATABASE'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            //$this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE); // fix limit binding
             $this->ttlNewsCount = $this->_ttlNewsCount();
-            return true;
+            return;
         } catch (PDOException $e) {
             $this->dbError = $e->getMessage();
-            return false;
+            return;
         }
     }
 
@@ -95,7 +97,6 @@ class RifNews
     }
 
     /**
-     * @param int $sort
      * @param int $take
      * @return mixed
      */
@@ -123,7 +124,7 @@ class RifNews
                 $orderDir = 'desc';
                 break;
         }
-        $sql = 'select * from uudised where not deleted order by ' . $orderBy . ' ' . $orderDir . ' limit '.$take.' offset '.$skip;
+        $sql = 'select * from uudised where not deleted and (expires > now() or expires is null) order by ' . $orderBy . ' ' . $orderDir . ' limit ' . $take . ' offset ' . $skip;
         $sth = $this->db->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
         $sth->execute();
         return $sth->fetchAll(PDO::FETCH_CLASS, 'NewsItem');
@@ -137,5 +138,16 @@ class RifNews
         $sth = $this->db->prepare($sql);
         $sth->execute();
         return $sth->fetchColumn();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getArticle($id) {
+        $sql = 'select * from uudised where not deleted and id = :id';
+        $sth = $this->db->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
+        $sth->execute(['id' => $id]);
+        $sth->setFetchMode(PDO::FETCH_CLASS, 'NewsItem');
+        return $sth->fetch();
     }
 }
