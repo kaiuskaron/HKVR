@@ -436,3 +436,8 @@ input[type="submit"] {
     align-items: center;
     margin: 0;
 }
+
+
+.login {
+    padding: 0;
+}
