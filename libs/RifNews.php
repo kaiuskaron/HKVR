@@ -21,7 +21,6 @@ class RifNews
         } else {
             $this->sort = 0;
         }
-
     }
 
     /**
@@ -91,7 +90,11 @@ class RifNews
                 $orderDir = 'desc';
                 break;
         }
-        $sql = 'select * from uudised where not deleted and (expires > now() or expires is null) order by ' . $orderBy . ' ' . $orderDir . ' limit ' . $take . ' offset ' . $skip;
+        $sql = 'select n.*, concat(u.firstname," ",u.lastname) as author 
+           from uudised n
+           join users u on n.user_id = u.id
+           where not n.deleted and (n.expires > now() or n.expires is null) 
+           order by ' . $orderBy . ' ' . $orderDir . ' limit ' . $take . ' offset ' . $skip;
         $sth = $this->db->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
         $sth->execute();
         return $sth->fetchAll(PDO::FETCH_CLASS, 'NewsItem');
@@ -111,7 +114,10 @@ class RifNews
      * @return mixed
      */
     public function getArticle($id) {
-        $sql = 'select * from uudised where not deleted and id = :id';
+        $sql = 'select n.*, concat(u.firstname," ",u.lastname) as author 
+           from uudised n
+           join users u on n.user_id = u.id
+           where not deleted and n.id = :id';
         $sth = $this->db->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
         $sth->execute(['id' => $id]);
         $sth->setFetchMode(PDO::FETCH_CLASS, 'NewsItem');

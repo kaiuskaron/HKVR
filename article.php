@@ -3,6 +3,7 @@ include 'app.php';
 
 use Carbon\Carbon;
 include 'header.php';
+$news = new RifNews();
 $item = $news->getArticle($_GET['id']);
 ?>
 <main>
@@ -21,12 +22,20 @@ $item = $news->getArticle($_GET['id']);
                             </div>
                             <div class="post">
                                 <p><?= $item->body; ?></p>
-                                <div class="post-meta">
-                                    <div class="box-icon">
-                                        <i class="icon-clock"></i>
+                                <div class="meta-wrap">
+                                    <div class="post-meta">
+                                        <div class="box-icon">
+                                            <i class="icon-clock"></i>
+                                        </div>
+                                        <p>
+                                            Lisatud: <?= Carbon::parse($item->created)->locale('et')->diffForHumans(); ?></p>
                                     </div>
-                                    <p>Lisatud:</p>
-                                    <p><?= Carbon::parse($item->created)->locale('et')->diffForHumans(); ?></p>
+                                    <div class="post-meta">
+                                        <div class="box-icon">
+                                            <i class="icon-user"></i>
+                                        </div>
+                                        <p>Autor: <?= $item->author; ?></p>
+                                    </div>
                                 </div>
                         </article>
                         <!-- todo loe järgmine, hinda, jms !-->

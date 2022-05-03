@@ -39,15 +39,20 @@
                         <li>
                             <?php
                             if ($user->isLoggedIn()) {
-                             echo '<a href="'.$_SERVER['PHP_SELF'].'?logout=1">Logi välja</a>';
-                                } else { ?>
-                                <form action="<?= $_SERVER['PHP_SELF'];?>" method="post" autocomplete="off" style="margin-left: 1rem">
-                                    <input type="text" name="username" placeholder="kasutaja" class="login" autocomplete="new-password">
-                                    <input type="password" name="password" placeholder="parool" class="login" autocomplete="off">
-                                    <button type="submit" name="login" class="btn comment-submit login-btn" value="1">Logi sisse</button>
+                                echo '<a href="' . $_SERVER['PHP_SELF'] . '?logout=1">Logi välja</a>';
+                            } else { ?>
+                                <form action="<?= $_SERVER['PHP_SELF']; ?>" method="post" autocomplete="off"
+                                      style="margin-left: 1rem">
+                                    <input type="text" name="username" placeholder="kasutaja" class="login"
+                                           autocomplete="new-password">
+                                    <input type="password" name="password" placeholder="parool" class="login"
+                                           autocomplete="off">
+                                    <button type="submit" name="login" class="btn comment-submit login-btn" value="1">
+                                        Logi sisse
+                                    </button>
                                 </form>
-
-                                <?php }
+                            <?php
+                            }
                             ?>
                         </li>
                     </ul>
@@ -56,5 +61,15 @@
         </div>
     </div>
 </header>
+<?php
+if ($user->error) { ?>
+<div class="grid">
+    <div class="col-1-1">
+        <div class="alert alert-danger">
+            <h4 class="copyright"><?= $user->error; ?></h4>
+        </div>
+    </div>
+</div>
 <!-- End Header -->
 <?php
+}

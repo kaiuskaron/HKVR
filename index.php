@@ -4,7 +4,9 @@ include 'app.php';
 use JasonGrimes\Paginator;
 use Carbon\Carbon;
 
-include 'header.php'; ?>
+include 'header.php';
+$news = new RifNews();
+?>
 <main>
     <?php
 
@@ -49,69 +51,84 @@ include 'header.php'; ?>
                 </form>
             </div>
         </div>
-    <?php } ?>
 
-    <div class="wrap blog-grid grey">
-        <div class="grid grid-pad">
-            <div class="content">
-                <h2>Uudised</h2>
-                <div class="col-1-1">
-                    <div class="filter">
-                        <form action="index.php" method="get">
-                            <label for="sort">Järjesta: </label>
-                            <select name="sort" id="sort" class="form-select" onchange="this.form.submit()">
-                                <option value="0" disabled <?= $news->sort ? '' : 'selected' ?>></option>
-                                <option value="1"<?= $news->sort === 1 ? 'selected' : '' ?>>Uuemad ees</option>
-                                <option value="2"<?= $news->sort === 2 ? 'selected' : '' ?>>Vanemad ees</option>
-                                <option value="3"<?= $news->sort === 3 ? 'selected' : '' ?>>Pealkiri</option>
-                            </select>
-                        </form>
-                    </div>
-                </div>
-                <?php
-                $all = $news->fetch(NEWS_PER_PAGE);
-                if ($all) {
-                    foreach ($all as $index => $item) { ?>
-                        <div class="col-1-2">
-                            <article class="post-wrap">
-                                <div class="post-img">
-                                    <?php if ($item->image) { ?>
-                                        <img src="<?= $item->image ?>"
-                                             alt="<?= $item->header ?>">
-                                    <?php } ?>
-                                </div>
-                                <div class="post">
-                                    <h2 class="entry-title">
-                                        <?= $item->header; ?>
-                                    </h2>
-                                    <p><?= $item->excerpt(); ?></p>
-                                    <div class="post-meta">
-                                        <div class="box-icon">
-                                            <i class="icon-clock"></i>
-                                        </div>
-                                        <p>Lisatud:</p>
-                                        <p><?= Carbon::parse($item->created)->locale('et')->diffForHumans(); ?></p>
-                                    </div>
-                                    <a class="btn read-more" href="article.php?id=<?= $item->id ?>">Loe edasi</a></div>
-                            </article>
+        <div class="wrap blog-grid grey">
+            <div class="grid grid-pad">
+                <div class="content">
+                    <h2>Uudised</h2>
+                    <div class="col-1-1">
+                        <div class="filter">
+                            <form action="index.php" method="get">
+                                <label for="sort">Järjesta: </label>
+                                <select name="sort" id="sort" class="form-select" onchange="this.form.submit()">
+                                    <option value="0" disabled <?= $news->sort ? '' : 'selected' ?>></option>
+                                    <option value="1"<?= $news->sort === 1 ? 'selected' : '' ?>>Uuemad ees</option>
+                                    <option value="2"<?= $news->sort === 2 ? 'selected' : '' ?>>Vanemad ees</option>
+                                    <option value="3"<?= $news->sort === 3 ? 'selected' : '' ?>>Pealkiri</option>
+                                </select>
+                            </form>
                         </div>
-                    <?php }
-                    $paginator = new Paginator(
-                        $news->ttlNewsCount,
-                        NEWS_PER_PAGE,
-                        $news->currentPage,
-                        'index.php?sort=' . $news->sort . '&page=(:num)'
-                    );
-                    $paginator->setPreviousText('Eelmine');
-                    $paginator->setNextText('Järgmine');
+                    </div>
+                    <?php
+                    $all = $news->fetch(NEWS_PER_PAGE);
+                    if ($all) {
+                        foreach ($all as $index => $item) { ?>
+                            <div class="col-1-2">
+                                <article class="post-wrap">
+                                    <div class="post-img">
+                                        <?php if ($item->image) { ?>
+                                            <img src="<?= $item->image ?>"
+                                                 alt="<?= $item->header ?>">
+                                        <?php } ?>
+                                    </div>
+                                    <div class="post">
+                                        <h2 class="entry-title">
+                                            <?= $item->header; ?>
+                                        </h2>
+                                        <p><?= $item->excerpt(); ?></p>
+                                        <div class="meta-wrap">
+                                            <div class="post-meta">
+                                                <div class="box-icon">
+                                                    <i class="icon-clock"></i>
+                                                </div>
+                                                <p>
+                                                    Lisatud: <?= Carbon::parse($item->created)->locale('et')->diffForHumans(); ?></p>
+                                            </div>
+                                            <div class="post-meta">
+                                                <div class="box-icon">
+                                                    <i class="icon-user"></i>
+                                                </div>
+                                                <p>Autor: <?= $item->author; ?></p>
+                                            </div>
+                                        </div>
+                                        <a class="btn read-more" href="article.php?id=<?= $item->id ?>">Loe edasi</a>
+                                    </div>
+                                </article>
+                            </div>
+                        <?php }
+                        $paginator = new Paginator(
+                            $news->ttlNewsCount,
+                            NEWS_PER_PAGE,
+                            $news->currentPage,
+                            'index.php?sort=' . $news->sort . '&page=(:num)'
+                        );
+                        $paginator->setPreviousText('Eelmine');
+                        $paginator->setNextText('Järgmine');
 
-                    echo '<div class="col-1-1">' . $paginator . '</div>';
-                }
-                ?>
+                        echo '<div class="col-1-1">' . $paginator . '</div>';
+                    }
+                    ?>
+                </div>
             </div>
         </div>
-    </div>
-
+    <?php } else { ?>
+        <div class="grid">
+            <div class="col-1-1">
+                <div class="alert alert-success">Jätkamiseks logi palun sisse.<br>Või siis loo uus kasutaja...</div>
+            </div>
+        </div>
+    <?php }
+    ?>
 </main>
 </body>
 </html>

@@ -102,6 +102,7 @@ include 'header.php';
 
                 <button type="submit" class="btn submit comment-submit">Loo kasutaja</button>
                 <span><?php echo $user->notice; ?></span>
+                <span><?php echo $user->error; ?></span>
             </form>
         </div>
     </div>

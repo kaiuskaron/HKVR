@@ -16,10 +16,9 @@ class User
     public $email_error = null;
     public $password_error = null;
     public $confirm_password_error = null;
-
     private $_signIn = false;
     private $db = null;
-    public $dbError;
+    public $error;
 
 
     public function __construct() {
@@ -35,8 +34,7 @@ class User
                 }
             }
         } catch (PDOException $e) {
-            $this->dbError = $e->getMessage();
-            //echo $this->dbError;
+            $this->error = $e->getMessage();
             return;
         }
         if (isset($_GET['logout'])) {
@@ -55,6 +53,7 @@ class User
     public function addUser() {
         //kontrollin sisestusi
         //eesnimi
+        $this->error = '';
         if (isset($_POST["first_name_input"]) and !empty($_POST["first_name_input"])) {
             $this->firstname = (filter_var($_POST["first_name_input"], FILTER_SANITIZE_STRING));
             if (empty($this->firstname)) {
@@ -98,30 +97,33 @@ class User
         if (isset($_POST["birth_day_input"]) and !empty($_POST["birth_day_input"])) {
             $birth_day = filter_var($_POST["birth_day_input"], FILTER_VALIDATE_INT);
             if ($birth_day < 1 or $birth_day > 31) {
-                $birth_day_error = "Palun vali sأ¼nni pأ¤ev!";
+                $this->error = "Palun vali sünni päev!";
             }
         } else {
-            $birth_day_error = "Palun vali sأ¼nni pأ¤ev!";
+            $this->error = "Palun vali sünni päev!";
         }
         //kuu
         if (isset($_POST["birth_month_input"]) and !empty($_POST["birth_month_input"])) {
             $birth_month = filter_var($_POST["birth_month_input"], FILTER_VALIDATE_INT);
             if ($birth_month < 1 or $birth_month > 12) {
-                $birth_month_error = "Palun vali sأ¼nni kuu!";
+                $this->error = "Palun vali sünni kuu!";
             }
         } else {
-            $birth_month_error = "Palun vali sأ¼nni kuu!";
+            $this->error = "Palun vali sünni kuu!";
         }
         //aasta
         if (isset($_POST["birth_year_input"]) and !empty($_POST["birth_year_input"])) {
             $birth_year = filter_var($_POST["birth_year_input"], FILTER_VALIDATE_INT);
             if ($birth_year < date("Y") - 110 or $birth_year > date("Y") - 13) {
-                $birth_year_error = "Palun vali sأ¼nni aasta!";
+                $this->error = "Palun vali sünni aasta!";
             }
         } else {
-            $birth_year_error = "Palun vali sأ¼nni aasta!";
+            $this->error = "Palun vali sünni aasta!";
         }
-        $this->birth_date = $birth_year . '-' . $birth_month . '-' . $birth_day;
+        
+        if ($this->error === '') {
+            $this->birth_date = $birth_year . '-' . $birth_month . '-' . $birth_day;
+        }
 
         //parool
         if (isset($_POST["password_input"]) and !empty($_POST["password_input"])) {
@@ -141,25 +143,40 @@ class User
         }
 
         if (empty($this->firstname_error) and empty($this->surname_error) and empty($this->birth_date_error) and empty($this->gender_error) and empty($this->email_error) and empty($this->password_error) and empty($this->confirm_password_error)) {
-            $sql = "INSERT INTO users (firstname, lastname, birthdate, gender, email, password) VALUES (?,?,?,?,?,?)";
+            $sql= "SELECT id from users where email=:email";
             $stmt = $this->db->prepare($sql);
-            $pwd_hash = password_hash($_POST['password_input'], PASSWORD_BCRYPT, ['cost' => 12]);
-            return $stmt->execute([$this->firstname, $this->surname, $this->birth_date, $this->gender, $this->email, $pwd_hash]) ? 1 : -1;
+            $stmt->execute(['email' => $this->email]);
+            if ($stmt->fetch()) {
+                $this->error = "E-mail on juba kasutusel!";
+                return false;
+            } else {
+                $sql = "INSERT INTO users (firstname, lastname, birthdate, gender, email, password) VALUES (?,?,?,?,?,?)";
+                $stmt = $this->db->prepare($sql);
+                $pwd_hash = password_hash($_POST['password_input'], PASSWORD_BCRYPT, ['cost' => 12]);
+                return $stmt->execute([$this->firstname, $this->surname, $this->birth_date, $this->gender, $this->email, $pwd_hash]) ? 1 : -1;
+            }
         }
     }
 
     public function signIn() {
         $this->_signIn = false;
-        $sql = "SELECT id, password FROM users where email=:email";
+        $sql = "SELECT password FROM users where email=:email";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['email' => $_POST['username']]);
-        //print_r($_POST);
         $row = $stmt->fetch();
-        //
-        //if (password_verify($_POST['password'], $row['password'])) {
+        if (password_verify($_POST['password'], $row['password'])) {
             $this->_signIn = true;
+            $sql = "SELECT id, firstname, lastname FROM users where email=:email";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(['email' => $_POST['username']]);
+            $row = $stmt->fetch();
             $_SESSION['user_id'] = $row['id'];
-            //print_r($row);
-        //}
+            $_SESSION['site_id'] = 'vr';
+            $_SESSION['user_name'] = $row['firstname'].' '.$row['lastname'];
+            return true;
+        } else {
+            $this->error = "Viga!";
+        }
+        return false;
     }
 }

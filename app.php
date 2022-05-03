@@ -12,11 +12,10 @@ require_once __DIR__ . '/libs/NewsItem.php';
 
 session_start();
 
-
 const NEWS_PER_PAGE = 4;
 
 $user = new User();
-$news = new RifNews();
+
 
 
 
