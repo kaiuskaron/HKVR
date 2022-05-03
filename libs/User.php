@@ -97,31 +97,31 @@ class User
         if (isset($_POST["birth_day_input"]) and !empty($_POST["birth_day_input"])) {
             $birth_day = filter_var($_POST["birth_day_input"], FILTER_VALIDATE_INT);
             if ($birth_day < 1 or $birth_day > 31) {
-                $this->error = "Palun vali sünni päev!";
+                $this->birth_date_error = "Palun vali sünni päev!";
             }
         } else {
-            $this->error = "Palun vali sünni päev!";
+            $this->birth_date_error = "Palun vali sünni päev!";
         }
         //kuu
         if (isset($_POST["birth_month_input"]) and !empty($_POST["birth_month_input"])) {
             $birth_month = filter_var($_POST["birth_month_input"], FILTER_VALIDATE_INT);
             if ($birth_month < 1 or $birth_month > 12) {
-                $this->error = "Palun vali sünni kuu!";
+                $this->birth_date_error = "Palun vali sünni kuu!";
             }
         } else {
-            $this->error = "Palun vali sünni kuu!";
+            $this->birth_date_error = "Palun vali sünni kuu!";
         }
         //aasta
         if (isset($_POST["birth_year_input"]) and !empty($_POST["birth_year_input"])) {
             $birth_year = filter_var($_POST["birth_year_input"], FILTER_VALIDATE_INT);
             if ($birth_year < date("Y") - 110 or $birth_year > date("Y") - 13) {
-                $this->error = "Palun vali sünni aasta!";
+                $this->birth_date_error = "Palun vali sünni aasta!";
             }
         } else {
-            $this->error = "Palun vali sünni aasta!";
+            $this->birth_date_error = "Palun vali sünni aasta!";
         }
-        
-        if ($this->error === '') {
+
+        if ($this->birth_date_error === '') {
             $this->birth_date = $birth_year . '-' . $birth_month . '-' . $birth_day;
         }
 
@@ -142,8 +142,14 @@ class User
             $this->confirm_password_error = "Palun sisesta salasõna kaks korda!";
         }
 
-        if (empty($this->firstname_error) and empty($this->surname_error) and empty($this->birth_date_error) and empty($this->gender_error) and empty($this->email_error) and empty($this->password_error) and empty($this->confirm_password_error)) {
-            $sql= "SELECT id from users where email=:email";
+        if (empty($this->firstname_error)
+            && empty($this->surname_error)
+            && empty($this->birth_date_error)
+            && empty($this->gender_error)
+            && empty($this->email_error)
+            && empty($this->password_error)
+            && empty($this->confirm_password_error)) {
+            $sql = "SELECT id from users where email=:email";
             $stmt = $this->db->prepare($sql);
             $stmt->execute(['email' => $this->email]);
             if ($stmt->fetch()) {
@@ -172,7 +178,7 @@ class User
             $row = $stmt->fetch();
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['site_id'] = 'vr';
-            $_SESSION['user_name'] = $row['firstname'].' '.$row['lastname'];
+            $_SESSION['user_name'] = $row['firstname'] . ' ' . $row['lastname'];
             return true;
         } else {
             $this->error = "Viga!";

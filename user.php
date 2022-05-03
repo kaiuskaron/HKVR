@@ -1,4 +1,5 @@
 <?php
+
 use Carbon\Carbon;
 
 include 'app.php';
@@ -44,7 +45,6 @@ include 'header.php';
                 <div class="col-1-2">
                     <div class="field">
                         <label for="birth_date_input">Sünniaeg</label>
-                        <!--input type="date" id="birth_date_input" name="birth_date_input" placeholder="millal sündis?"!-->
                         <select name="birth_year_input" id="birth_year_input" style="width: auto">
                             <option value="" selected disabled>aasta</option>
                             <?php
@@ -71,6 +71,7 @@ include 'header.php';
                             }
                             ?>
                         </select>
+                        <span><?php echo $user->birth_date_error; ?></span>
                     </div>
                 </div>
 
@@ -78,31 +79,30 @@ include 'header.php';
                     <div class="field">
                         <label for="email_input">E-mail</label>
                         <input type=email id="email_input" name="email_input" placeholder="kasutajatunnus"
-                               value="<?php echo $user->email; ?>"><span><?php echo $user->email_error; ?></span>
+                               value="<?php echo $user->email; ?>">
+                        <span><?php echo $user->email_error; ?></span>
                     </div>
                 </div>
 
                 <div class="col-1-2">
                     <div class="field">
-                        <label for="password_input">Salasõna<label>
-                                <input type="password" id="password_input" name="password_input"
-                                       placeholder="parool - min 8 tähemärki"
-                                       required><span><?php echo $user->password_error; ?></span>
+                        <label for="password_input">Salasõna</label>
+                        <input type="password" id="password_input" name="password_input"
+                               placeholder="parool - min 8 tähemärki"
+                               required><span><?php echo $user->password_error; ?></span>
                     </div>
                 </div>
 
                 <div class="col-1-2">
                     <div class="field">
-                        <label for="confirm_password_input">Salasõna<label>
-                                <input type="password" id="confirm_password_input" name="confirm_password_input"
-                                       placeholder="korrake parooli"
-                                       required><span><?php echo $user->confirm_password_error; ?></span>
+                        <label for="confirm_password_input">Salasõna</label>
+                        <input type="password" id="confirm_password_input" name="confirm_password_input"
+                               placeholder="korrake parooli"
+                               required>
+                        <span><?php echo $user->confirm_password_error; ?></span>
                     </div>
                 </div>
-
                 <button type="submit" class="btn submit comment-submit">Loo kasutaja</button>
-                <span><?php echo $user->notice; ?></span>
-                <span><?php echo $user->error; ?></span>
             </form>
         </div>
     </div>
