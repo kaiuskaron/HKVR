@@ -9,6 +9,7 @@ $dotenv->load();
 require_once __DIR__ . '/libs/User.php';
 require_once __DIR__ . '/libs/RifNews.php';
 require_once __DIR__ . '/libs/NewsItem.php';
+require_once __DIR__ . '/libs/Gallery.php';
 
 session_start();
 

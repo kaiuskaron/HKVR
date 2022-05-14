@@ -6,8 +6,31 @@ use Carbon\Carbon;
 
 include 'header.php';
 $news = new RifNews();
+
+$gallery = new Gallery();
+
+if (isset($_POST['image-upload'])) {
+    $gallery->uploadImage();
+}
 ?>
+
 <main>
+    <div class="wrap contact">
+        <div class="grid grid-pad">
+            <h2>Lisa pilte</h2>
+            <form action="index.php" method="post" enctype="multipart/form-data">
+                <input type="file" id="files" name="image[]" accept="image/png, image/jpeg" capture="environment"
+                       multiple>
+                <input type="submit" value="upload" name="image-upload" class="btn comment-submit">
+                <?php
+                if ($gallery->error) {
+                    echo $gallery->error;
+                }
+                ?>
+                <div id="output" class="output"></div>
+            </form>
+        </div>
+    </div>
     <?php
 
     if (!empty($_POST) && isset($_POST['header'])) {
@@ -129,6 +152,7 @@ $news = new RifNews();
         </div>
     <?php }
     ?>
+
 </main>
 </body>
 </html>

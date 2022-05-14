@@ -181,7 +181,7 @@ class User
             $_SESSION['user_name'] = $row['firstname'] . ' ' . $row['lastname'];
             return true;
         } else {
-            $this->error = "Viga!";
+            $this->error = "Vale kasutaja või parool!";
         }
         return false;
     }

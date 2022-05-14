@@ -75,7 +75,7 @@ include 'header.php';
                     </div>
                 </div>
 
-                <div class="col-1-2">
+                <div class="col-1-1">
                     <div class="field">
                         <label for="email_input">E-mail</label>
                         <input type=email id="email_input" name="email_input" placeholder="kasutajatunnus"
@@ -83,6 +83,8 @@ include 'header.php';
                         <span><?php echo $user->email_error; ?></span>
                     </div>
                 </div>
+
+
 
                 <div class="col-1-2">
                     <div class="field">
@@ -95,7 +97,7 @@ include 'header.php';
 
                 <div class="col-1-2">
                     <div class="field">
-                        <label for="confirm_password_input">Salasõna</label>
+                        <label for="confirm_password_input">Salasõna kordus</label>
                         <input type="password" id="confirm_password_input" name="confirm_password_input"
                                placeholder="korrake parooli"
                                required>

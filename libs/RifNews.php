@@ -124,3 +124,6 @@ class RifNews
         return $sth->fetch();
     }
 }
+
+
+

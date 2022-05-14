@@ -14,6 +14,7 @@
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900' rel='stylesheet'
           type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <script src="script.js" defer></script>
 </head>
 <body>
 <!-- Header -->
@@ -44,7 +45,7 @@
                                 <form action="<?= $_SERVER['PHP_SELF']; ?>" method="post" autocomplete="off"
                                       style="margin-left: 1rem">
                                     <input type="text" name="username" placeholder="kasutaja" class="login"
-                                           autocomplete="new-password">
+                                           autocomplete="new-password" value="<?php if(isset($_POST['username'])) echo $_POST['username'];?>">
                                     <input type="password" name="password" placeholder="parool" class="login"
                                            autocomplete="off">
                                     <button type="submit" name="login" class="btn comment-submit login-btn" value="1">
@@ -67,6 +68,8 @@ if ($user->error) { ?>
     <div class="col-1-1">
         <div class="alert alert-danger">
             <h4 class="copyright"><?= $user->error; ?></h4>
+            <p class="copyright">Unustasid parooli?</p>
+            <p class="copyright">Kliki <a href="#">siia</a></p>
         </div>
     </div>
 </div>
