@@ -29,14 +29,10 @@
                     <input type="checkbox" id="nav-button">
                     <label for="nav-button" onclick></label>
                     <ul class="nav-container">
-                        <!--
-                        <li><a href="index.php" class="current">Home</a></li>
-                        <li><a href="#">Services</a></li>
-                        <li><a href="#">Work</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Pricing</a></li>!-->
+                        <li><a href="index.php">Esileht </a></li>
+                        <li><a href="addNews.php">Lisa uudis </a></li>
+                        <li><a href="addGallery.php">Lisa pilte </a></li>
                         <li><a href="user.php">Lisa kasutaja </a></li>
-
                         <li>
                             <?php
                             if ($user->isLoggedIn()) {

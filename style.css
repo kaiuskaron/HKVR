@@ -553,10 +553,11 @@ blockquote p {
 .meta-wrap {
     display: flex;
 }
+
 .post-wrap .post-meta {
     font-size: .8em;
     margin: 1.5em 0;
-    color:  #1abc9c;
+    color: #1abc9c;
 }
 
 .post-meta {
@@ -1285,7 +1286,7 @@ footer p, footer a {
     text-decoration: none;
     background-color: #fff;
     border: 1px solid #dee2e6;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 .pagination li:first-child a {
@@ -1324,6 +1325,7 @@ input.login {
 .output {
     display: flex;
     justify-content: flex-start;
+    flex-wrap: wrap;
 }
 
 .thumbnail {
@@ -1333,9 +1335,15 @@ input.login {
     border-radius: 10px;
 }
 
-.output>div {
-    width: 200px;
-    margin-right: 1rem;
+.output > div {
+    width: 220px;
+    margin: 0 1rem 1rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .img-title {
@@ -1346,6 +1354,7 @@ input.login {
     display: block;
     font-size: 12px;
     margin-top: 5px;
+    margin-bottom: 0 !important;
 }
 
 .radios {
@@ -1355,7 +1364,59 @@ input.login {
 .radios label {
     display: block;
 }
-/*------------------------------------------------------------- 
+
+.alert>i {
+    margin-right: 1rem;
+}
+
+
+/* The Modal (background) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: black;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.slide {
+    width: 100%;
+    height: auto;
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #999;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*-------------------------------------------------------------
   Media queries
 ---------------------------------------------------------------*/
 

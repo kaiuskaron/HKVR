@@ -8,6 +8,8 @@
     "vlucas/phpdotenv": "^5.4",
     "jasongrimes/paginator": "~1.0",
     "ext-pdo": "*",
-    "nesbot/carbon": "^2.57"
+    "nesbot/carbon": "^2.57",
+    "ext-gd": "*",
+    "ext-json": "*"
   }
 }

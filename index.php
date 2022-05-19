@@ -8,30 +8,42 @@ include 'header.php';
 $news = new RifNews();
 
 $gallery = new Gallery();
-
-if (isset($_POST['image-upload'])) {
-    $gallery->uploadImage();
-}
+$images = $gallery->fetchThumbs();
 ?>
 
 <main>
-    <div class="wrap contact">
-        <div class="grid grid-pad">
-            <h2>Lisa pilte</h2>
-            <form action="index.php" method="post" enctype="multipart/form-data">
-                <input type="file" id="files" name="image[]" accept="image/png, image/jpeg" capture="environment"
-                       multiple>
-                <input type="submit" value="upload" name="image-upload" class="btn comment-submit">
-                <?php
-                if ($gallery->error) {
-                    echo $gallery->error;
-                }
-                ?>
-                <div id="output" class="output"></div>
-            </form>
+    <?php if (!empty($images)) { ?>
+        <div class="wrap blog-grid grey">
+            <div class="grid grid-pad">
+                <div class="content">
+                    <h2>Pildid</h2>
+                    <?php
+                    foreach ($images as $thumb) { ?>
+                        <div class="col-1-6">
+                            <div class="post-wrap">
+                                <div class="post-img">
+                                    <img src="uploads/thumbs/<?= $thumb->name; ?>" alt="<?= $thumb->alt; ?>" class="">
+                                    <figure-caption><?=$thumb->alt;?></figure-caption>
+                                </div>
+                                <div class="post">
+                                    <a class="btn read-more" href="#" onclick="openModal('<?= $thumb->name; ?>', <?= $thumb->id; ?>)">Vaata</a>
+                                    <div class="meta-wrap">
+                                        <div class="post-meta" style="width: 100%">
+                                            <div class="box-icon">
+                                                <i class="icon-eye"></i>
+                                            </div>
+                                            <p>vaadatud: <?= $thumb->view_count; ?></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php }
+                    ?>
+                </div>
+            </div>
         </div>
-    </div>
-    <?php
+    <?php }
 
     if (!empty($_POST) && isset($_POST['header'])) {
         $newItem = new NewsItem($_POST);
@@ -40,41 +52,6 @@ if (isset($_POST['image-upload'])) {
     }
 
     if ($user->isLoggedIn()) { ?>
-        <div class="wrap contact">
-            <div class="grid grid-pad">
-                <h2>Lisa uudis</h2>
-                <?php
-                if (isset($insertResult) && $insertResult === 1) { ?>
-                    <div class="alert alert-success">Uudis lisatud!</div>
-                <?php } elseif ((isset($insertResult) && $insertResult === -1)) { ?>
-                    <div class="alert alert-danger">Viga! Uudist ei lisatud!</div>
-                <?php } ?>
-                <form action="index.php" method="post" enctype="multipart/form-data">
-                    <div class="field">
-                        <label for="header">Uudise pealkiri</label>
-                        <input type="text" id="header" name="header" placeholder="lisa pealkiri" required>
-                    </div>
-                    <div class="field">
-                        <label for="body">Uudise sisu</label>
-                        <textarea id="body" name="body" required></textarea>
-                    </div>
-                    <div class="col-1-2">
-                        <div class="field">
-                            <label for="file">Uudise pilt</label>
-                            <input type="file" name="file" id="file" placeholder="lisa pilt">
-                        </div>
-                    </div>
-                    <div class="col-1-2" style="padding-right: 0">
-                        <div class="field">
-                            <label for="expires">Uudise aegumistähtaeg</label>
-                            <input type="date" id="expires" name="expires" placeholder="millal aegub">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn submit comment-submit">Lisa uudis</button>
-                </form>
-            </div>
-        </div>
-
         <div class="wrap blog-grid grey">
             <div class="grid grid-pad">
                 <div class="content">
@@ -147,12 +124,19 @@ if (isset($_POST['image-upload'])) {
     <?php } else { ?>
         <div class="grid">
             <div class="col-1-1">
-                <div class="alert alert-success">Jätkamiseks logi palun sisse.<br>Või siis loo uus kasutaja...</div>
+                <div class="alert alert-success">Udiste nägemiseks logi palun sisse.<br>Või siis loo uus kasutaja...</div>
             </div>
         </div>
     <?php }
     ?>
 
 </main>
+<div id="myModal" class="modal">
+    <span class="close cursor" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+        <img class="slide" src="" alt="" id="slide">
+    </div>
+</div>
+
 </body>
 </html>
