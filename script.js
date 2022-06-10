@@ -10,8 +10,8 @@ window.onload = () => {
             const files = event.target.files; //FileList object
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
-                //Only pics
-                if (!file.type.match('image'))
+                //Only pics with size
+                if (!file.type.match('image') || file.size > 1024 * 1024)
                     continue;
                 const picReader = new FileReader();
                 picReader.addEventListener("load", (event) => {
@@ -76,18 +76,37 @@ function radio(value, name, i) {
 
 // Open the Modal
 function openModal(src, id) {
-    console.log(src);
     document.getElementById("slide").src = 'uploads/' + src;
     document.getElementById("myModal").style.display = "block";
     const xhr = new XMLHttpRequest();
     xhr.open("POST", 'viewCount.php', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({
-        id: id
-    }));
+            id: id
+        })
+    );
 }
 
 // Close the Modal
 function closeModal() {
     document.getElementById("myModal").style.display = "none";
+}
+
+function rate(imgId, rate) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", 'ratePhoto.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({
+            imgId: imgId,
+            rate: rate
+        })
+    );
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            const avg = JSON.parse(xhr.response);
+            if (avg && avg.rating) {
+                document.querySelector('#rating_' + imgId).innerText = Math.round(avg.rating,1);
+            }
+        }
+    }
 }

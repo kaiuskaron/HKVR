@@ -12,6 +12,7 @@ class Image
     public $privacy = '';
     public $author = '';
     public $error = null;
+    public $rate = 0;
 }
 
 class Gallery
@@ -38,8 +39,6 @@ class Gallery
     }
 
     public function uploadImage(): array {
-        //print_r($_POST);
-        //print_r($_FILES);
         $this->error = '';
         if (isset($_FILES['image']) && is_array($_FILES['image']['tmp_name'])) {
             foreach ($_FILES['image']['tmp_name'] as $index => $file) {
@@ -76,9 +75,10 @@ class Gallery
     }
 
     public function fetchThumbs() {
-        $sql = 'select g.*, concat(u.firstname," ",u.lastname) as author
+        $sql = 'select g.id, g.name, g.alt, g.view_count, concat(u.firstname," ",u.lastname) as author, avg(pr.rating) as rate
            from gallery g
            join users u on g.user_id = u.id 
+           left join photo_rating pr on g.id = pr.photoId
            where privacy>=?';
 
         $privacy = 2;
@@ -86,6 +86,7 @@ class Gallery
             $privacy = 1;
             $sql .= ' or g.user_id = '.$_SESSION['user_id'];
         }
+        $sql .= ' group by g.id';
 
         //where not n.deleted and (n.expires > now() or n.expires is null)
         //order by ' . $orderBy . ' ' . $orderDir . ' limit ' . $take . ' offset ' . $skip;
@@ -151,6 +152,18 @@ class Gallery
         $sql = "insert into gallery (name, alt, privacy, user_id, view_count, title) values (?,?,?,?,?,?)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$image->db_name, $image->alt, $image->privacy, 3, 0, $image->name]);
+    }
+
+    private function watermark($watermark) {
+//praegu selline usalduslik, eeldame, et on pilt
+        $watermark_file_type = strtolower(pathinfo($watermark, PATHINFO_EXTENSION));
+        $watermark_image = $this->create_image_from_file($watermark, $watermark_file_type);
+        $watermark_w = imagesx($watermark_image);
+        $watermark_h = imagesy($watermark_image);
+        $watermark_x = imagesx($this->new_temp_image) - $watermark_w - 10;
+        $watermark_y = imagesy($this->new_temp_image) - $watermark_h - 10;
+        imagecopy($this->new_temp_image, $watermark_image, $watermark_x, $watermark_y, 0, 0, $watermark_w, $watermark_h);
+        imagedestroy($watermark_image);
     }
 
 }

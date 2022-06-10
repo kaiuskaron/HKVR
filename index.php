@@ -19,14 +19,15 @@ $images = $gallery->fetchThumbs();
                     <h2>Pildid</h2>
                     <?php
                     foreach ($images as $thumb) { ?>
-                        <div class="col-1-6">
+                        <div class="col-1-3">
                             <div class="post-wrap">
                                 <div class="post-img">
                                     <img src="uploads/thumbs/<?= $thumb->name; ?>" alt="<?= $thumb->alt; ?>" class="">
-                                    <figure-caption><?=$thumb->alt;?></figure-caption>
+                                    <figure-caption><?= $thumb->alt; ?></figure-caption>
                                 </div>
                                 <div class="post">
-                                    <a class="btn read-more" href="#" onclick="openModal('<?= $thumb->name; ?>', <?= $thumb->id; ?>)">Vaata</a>
+                                    <a class="btn read-more" href="#"
+                                       onclick="openModal('<?= $thumb->name; ?>', <?= $thumb->id; ?>)">Vaata</a>
                                     <div class="meta-wrap">
                                         <div class="post-meta" style="width: 100%">
                                             <div class="box-icon">
@@ -34,6 +35,30 @@ $images = $gallery->fetchThumbs();
                                             </div>
                                             <p>vaadatud: <?= $thumb->view_count; ?></p>
                                         </div>
+                                        <div class="post-meta" style="width: 100%">
+                                            <div class="box-icon">
+                                                <i class="icon-star"></i>
+                                            </div>
+                                            <p>hinne: <span id="rating_<?= $thumb->id; ?>"><?= round($thumb->rate,1); ?></span></p>
+                                        </div>
+                                    </div>
+                                    <div class="rating">
+                                        <?php
+                                        for ($i = 1; $i < 6; $i++) { ?>
+                                            <label for="rate_<?= $thumb->id.'_'.$i; ?>">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                     width="32px" height="32px" viewBox="0 0 122.88 116.864"
+                                                     enable-background="new 0 0 122.88 116.864" xml:space="preserve"><g>
+                                                        <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#ffffff" stroke="#000000"
+                                                                 points="61.44,0 78.351,41.326 122.88,44.638 88.803,73.491 99.412,116.864 61.44,93.371 23.468,116.864 34.078,73.491 0,44.638 44.529,41.326 61.44,0"/>
+                                                    </g>
+                                                </svg>
+                                                <input type="radio" name="rating" value="<?= $i; ?>"
+                                                       id="rate_<?= $thumb->id.'_'.$i; ?>"
+                                                       onchange="rate(<?=$thumb->id.", ".$i;?>)">
+                                            </label>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
@@ -100,6 +125,7 @@ $images = $gallery->fetchThumbs();
                                                 </div>
                                                 <p>Autor: <?= $item->author; ?></p>
                                             </div>
+
                                         </div>
                                         <a class="btn read-more" href="article.php?id=<?= $item->id ?>">Loe edasi</a>
                                     </div>
@@ -124,7 +150,8 @@ $images = $gallery->fetchThumbs();
     <?php } else { ?>
         <div class="grid">
             <div class="col-1-1">
-                <div class="alert alert-success">Udiste nägemiseks logi palun sisse.<br>Või siis loo uus kasutaja...</div>
+                <div class="alert alert-success">Udiste nägemiseks logi palun sisse.<br>Või siis loo uus kasutaja...
+                </div>
             </div>
         </div>
     <?php }

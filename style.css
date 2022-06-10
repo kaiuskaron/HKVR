@@ -548,6 +548,8 @@ blockquote p {
 
 .post-wrap img {
     width: 100%;
+    max-height: 200px;
+    object-fit: cover;
 }
 
 .meta-wrap {
@@ -1604,3 +1606,20 @@ input.login {
     }
 }
 
+.rating {
+    display: block;
+    width: 100%;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating polygon {
+    cursor: pointer;
+    transition: fill .2s;
+}
+
+.rating label:hover polygon {
+    fill: #FFD401;
+}

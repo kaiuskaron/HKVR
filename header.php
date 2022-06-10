@@ -65,7 +65,8 @@ if ($user->error) { ?>
         <div class="alert alert-danger">
             <h4 class="copyright"><?= $user->error; ?></h4>
             <p class="copyright">Unustasid parooli?</p>
-            <p class="copyright">Kliki <a href="#">siia</a></p>
+            <p class="copyright">Kliki <a href="#
+">siia</a></p>
         </div>
     </div>
 </div>
