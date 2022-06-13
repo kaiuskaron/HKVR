@@ -104,13 +104,14 @@ class RifNews
      * @return mixed
      */
     private function _ttlNewsCount() {
-        $sql = 'select count(id) from uudised where not deleted';
+        $sql = 'select count(id) from uudised where not deleted and (expires > now() or expires is null)';
         $sth = $this->db->prepare($sql);
         $sth->execute();
         return $sth->fetchColumn();
     }
 
     /**
+     * @param $id
      * @return mixed
      */
     public function getArticle($id) {
@@ -122,6 +123,30 @@ class RifNews
         $sth->execute(['id' => $id]);
         $sth->setFetchMode(PDO::FETCH_CLASS, 'NewsItem');
         return $sth->fetch();
+    }
+
+    /**
+     * @param NewsItem $data
+     * @return bool|null
+     */
+    public function update(NewsItem $data): ?bool {
+        $uploadDir = 'uploads/';
+        $uploadFile =  isset($_POST['image']) && $_POST['image']> ' ' ? $_POST['image']: null;
+        if (isset($_FILES) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+            $uploadFile = $uploadDir . basename($_FILES['file']['name']);
+            if (!move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
+                $uploadFile = null;
+            }
+        }
+        if (!$this->dbError && $data->editId) {
+            if ($data->expires == '') {
+                $data->expires = null;
+            }
+            $sql = "update uudised set header=?, body=?, expires=?, user_id=?, image=? where id=?";
+            $stmt = $this->db->prepare($sql);
+            return $stmt->execute([$data->header, $data->body, $data->expires, $data->user_id, $uploadFile, $data->editId]) ? 1 : -1;
+        }
+        return null;
     }
 }
 

@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/simplegrid.css">
     <link rel="stylesheet" href="assets/css/icomoon.css">
-    <link rel="stylesheet" href="assets/css/lightcase.css">
+    <link rel="stylesheet" href="assets/css/helper.css">
     <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,900' rel='stylesheet'
           type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
     <script src="script.js" defer></script>
 </head>
 <body>

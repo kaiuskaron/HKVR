@@ -25,6 +25,13 @@ class User
         try {
             $this->db = new PDO("mysql:host=localhost;dbname=" . $_ENV['DB_DATABASE'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            /* PWD reset
+            $sql = "update users set password=?";
+            $stmt = $this->db->prepare($sql);
+            $pwd_hash = password_hash('test123', PASSWORD_BCRYPT, ['cost' => 12]);
+            $stmt->execute([$pwd_hash]);*/
+
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 if (isset($_POST['first_name_input'])) {
                     $this->addUser();
@@ -170,7 +177,7 @@ class User
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['email' => $_POST['username']]);
         $row = $stmt->fetch();
-        //if (password_verify($_POST['password'], $row['password'])) {
+        if (password_verify($_POST['password'], $row['password'])) {
             $this->_signIn = true;
             $sql = "SELECT id, firstname, lastname FROM users where email=:email";
             $stmt = $this->db->prepare($sql);
@@ -180,9 +187,9 @@ class User
             $_SESSION['site_id'] = 'vr';
             $_SESSION['user_name'] = $row['firstname'] . ' ' . $row['lastname'];
             return true;
-        //} else {
-        //    $this->error = "Vale kasutaja või parool!";
-        //}
+        } else {
+            $this->error = "Vale kasutaja või parool!";
+        }
         return false;
     }
 }

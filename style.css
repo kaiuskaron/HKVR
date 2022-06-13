@@ -45,7 +45,7 @@ Grey #ECF0F1
 
 .grey {
     background: #ECF0F1;
-    padding: 100px 0 150px;
+    padding: 100px 0 0;
 }
 
 a {
@@ -167,8 +167,18 @@ blockquote p {
     -moz-border-radius: 30px;
     border-radius: 30px;
     background: #1abc9c;
+    cursor: pointer;
 }
 
+.btn.danger {
+    background: #be3947;
+    border-color: #be3947;
+}
+
+.btn.danger:hover {
+    background: #842029;
+    border-color: #842029;
+}
 ::file-selector-button {
     margin: .8em;
 }
@@ -618,6 +628,7 @@ blockquote p {
     overflow: hidden;
     height: auto;
     max-height: 450px;
+    width: 100%;
 }
 
 /* Blog Grid */
@@ -1318,6 +1329,10 @@ input.login {
 
 .login-btn {
     margin: 0;
+}
+
+.field {
+    overflow: hidden;
 }
 
 .field span {

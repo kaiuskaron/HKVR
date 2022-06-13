@@ -2,15 +2,18 @@
 include 'app.php';
 
 use Carbon\Carbon;
+
 include 'header.php';
 $news = new RifNews();
-$item = $news->getArticle($_GET['id']);
+if (isset($_GET['id'])) {
+    $item = $news->getArticle($_GET['id']);
+}
 ?>
 <main>
     <div class="wrap blog-grid grey">
         <div class="grid grid-pad">
             <div class="col-1-1">
-                <?php if ($item) { ?>
+                <?php if (isset($item)) { ?>
                     <div class="content">
                         <h2><?= $item->header; ?></h2>
                         <article class="post-wrap">
@@ -38,6 +41,16 @@ $item = $news->getArticle($_GET['id']);
                                     </div>
                                 </div>
                         </article>
+                        <?php if ($user->isLoggedIn()) { ?>
+                            <button class="btn submit danger comment-submit"
+                               style="padding:8px 26px" onclick="deleteNews(<?= $item->id;?>)">
+                                <i class="icon-trash-alt"></i> Kustuta
+                            </button>
+                            <a href="addNews.php?edit=<?= $item->id; ?>" class="btn submit comment-submit mr-1"
+                               style="padding:8px 26px">
+                                <i class="icon-pencil"></i> Muuda
+                            </a>
+                        <?php } ?>
                         <!-- todo loe järgmine, hinda, jms !-->
                     </div>
                 <?php } ?>

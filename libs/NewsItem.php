@@ -10,6 +10,7 @@ class NewsItem
     public $user_id = 0;
     public $image = '';
     public $author = '';
+    public $editId = null;
 
     public function __construct(array $array = null) {
         if ($array) {
@@ -18,6 +19,7 @@ class NewsItem
             $this->expires = $array['expires'];
             $this->created = Date('now');
             $this->user_id = $_SESSION['user_id'];
+            $this->editId = $array['edit'];
         }
     }
 

@@ -189,3 +189,38 @@
 [class^="pe-7s-"], [class*=" pe-7s-"] {
   display: inline-block;
 }
+
+/* üldised asjad */
+.mr-1 {
+  margin-right: 1rem!important;
+}
+
+.ml-1 {
+  margin-left: 1rem!important;
+}
+
+.mt-1 {
+  margin-top: 1rem!important;
+}
+
+.mb-1 {
+  margin-bottom: 1rem!important;
+}
+
+.px-1 {
+  padding-left: 1rem!important;
+  padding-right: 1rem!important;
+}
+
+.py-1 {
+  padding-top: 1rem!important;
+  padding-bottom: 1rem!important;
+}
+
+.p-1 {
+  padding: 1rem!important;
+}
+
+.m-1 {
+  margin: 1rem!important;
+}

@@ -9,6 +9,7 @@ $news = new RifNews();
 
 $gallery = new Gallery();
 $images = $gallery->fetchThumbs();
+
 ?>
 
 <main>
@@ -44,21 +45,23 @@ $images = $gallery->fetchThumbs();
                                     </div>
                                     <div class="rating">
                                         <?php
-                                        for ($i = 1; $i < 6; $i++) { ?>
-                                            <label for="rate_<?= $thumb->id.'_'.$i; ?>">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                                     width="32px" height="32px" viewBox="0 0 122.88 116.864"
-                                                     enable-background="new 0 0 122.88 116.864" xml:space="preserve"><g>
-                                                        <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#ffffff" stroke="#000000"
-                                                                 points="61.44,0 78.351,41.326 122.88,44.638 88.803,73.491 99.412,116.864 61.44,93.371 23.468,116.864 34.078,73.491 0,44.638 44.529,41.326 61.44,0"/>
-                                                    </g>
+                                        if ($user->isLoggedIn()) {
+                                            for ($i = 1; $i < 6; $i++) { ?>
+                                                <label for="rate_<?= $thumb->id.'_'.$i; ?>">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                         width="32px" height="32px" viewBox="0 0 122.88 116.864"
+                                                         enable-background="new 0 0 122.88 116.864" xml:space="preserve"><g>
+                                                            <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#ffffff" stroke="#000000"
+                                                                     points="61.44,0 78.351,41.326 122.88,44.638 88.803,73.491 99.412,116.864 61.44,93.371 23.468,116.864 34.078,73.491 0,44.638 44.529,41.326 61.44,0"/>
+                                                        </g>
                                                 </svg>
-                                                <input type="radio" name="rating" value="<?= $i; ?>"
-                                                       id="rate_<?= $thumb->id.'_'.$i; ?>"
-                                                       onchange="rate(<?=$thumb->id.", ".$i;?>)">
-                                            </label>
-                                        <?php } ?>
+                                                    <input type="radio" name="rating" value="<?= $i; ?>"
+                                                           id="rate_<?= $thumb->id.'_'.$i; ?>"
+                                                           onchange="rate(<?=$thumb->id.", ".$i;?>)">
+                                                </label>
+                                            <?php }
+                                        } ?>
                                     </div>
                                 </div>
                             </div>
@@ -72,7 +75,11 @@ $images = $gallery->fetchThumbs();
 
     if (!empty($_POST) && isset($_POST['header'])) {
         $newItem = new NewsItem($_POST);
-        $insertResult = $news->insert($newItem);
+        if (isset($_POST['edit'])) {
+            $insertResult = $news->update($newItem);
+        } else {
+            $insertResult = $news->insert($newItem);
+        }
         unset($_POST);
     }
 

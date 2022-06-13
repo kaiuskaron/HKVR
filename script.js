@@ -6,27 +6,29 @@ window.onload = () => {
         const filesInput = document.getElementById("files");
         const output = document.getElementById("output");
         const button = document.getElementById('image-upload');
-        filesInput.addEventListener("change", (event) => {
-            const files = event.target.files; //FileList object
-            for (let i = 0; i < files.length; i++) {
-                let file = files[i];
-                //Only pics with size
-                if (!file.type.match('image') || file.size > 1024 * 1024)
-                    continue;
-                const picReader = new FileReader();
-                picReader.addEventListener("load", (event) => {
-                    const img = createImg(event.target.result, i);
-                    output.appendChild(img);
-                    photos.push(file);
-                    if (button.disabled === true) {
-                        button.disabled = false;
-                        button.classList.remove('btn-disabled');
-                    }
-                });
-                //Read the image
-                picReader.readAsDataURL(file);
-            }
-        });
+        if (filesInput) {
+            filesInput.addEventListener("change", (event) => {
+                const files = event.target.files; //FileList object
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i];
+                    //Only pics with size
+                    if (!file.type.match('image') || file.size > 1024 * 1024)
+                        continue;
+                    const picReader = new FileReader();
+                    picReader.addEventListener("load", (event) => {
+                        const img = createImg(event.target.result, i);
+                        output.appendChild(img);
+                        photos.push(file);
+                        if (button.disabled === true) {
+                            button.disabled = false;
+                            button.classList.remove('btn-disabled');
+                        }
+                    });
+                    //Read the image
+                    picReader.readAsDataURL(file);
+                }
+            });
+        }
     } else {
         console.log("Your browser does not support File API");
     }
@@ -98,14 +100,37 @@ function rate(imgId, rate) {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({
             imgId: imgId,
-            rate: rate
+            rate : rate
         })
     );
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             const avg = JSON.parse(xhr.response);
             if (avg && avg.rating) {
-                document.querySelector('#rating_' + imgId).innerText = Math.round(avg.rating,1);
+                document.querySelector('#rating_' + imgId).innerText = Math.round(avg.rating, 1);
+            }
+        }
+    }
+}
+
+function removeNewsImage(e) {
+    const div = e.target.closest('.single');
+    div.parentNode.removeChild(div);
+}
+
+function deleteNews(id) {
+    if (confirm('Kindel, et tahad uudise #'+id+' kustutada?')) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", 'delNews.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+                id: id
+            })
+        );
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                const avg = JSON.parse(xhr.response);
+                document.location.href = 'index.php';
             }
         }
     }
