@@ -156,7 +156,7 @@ $images = $gallery->fetchThumbs();
         </div>
     <?php } else { ?>
         <div class="grid">
-            <div class="col-1-1">
+            <div class="col-1-1 mt-1">
                 <div class="alert alert-success">Udiste nägemiseks logi palun sisse.<br>Või siis loo uus kasutaja...
                 </div>
             </div>
