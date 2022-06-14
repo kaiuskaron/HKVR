@@ -18,12 +18,7 @@ if (isset($_GET['edit'])) {
                 <?php } else { ?>
                     <h2>Lisa uudis</h2>
                     <?php
-                }
-                if (isset($insertResult) && $insertResult === 1) { ?>
-                    <div class="alert alert-success">Uudis lisatud!</div>
-                <?php } elseif ((isset($insertResult) && $insertResult === -1)) { ?>
-                    <div class="alert alert-danger">Viga! Uudist ei lisatud!</div>
-                <?php } ?>
+                } ?>
                 <form action="index.php" method="post" enctype="multipart/form-data">
                     <div class="field">
                         <label for="header">Uudise pealkiri</label>
@@ -90,8 +85,14 @@ if (isset($_GET['edit'])) {
     <?php }
     ?>
     <script>
+        /*ClassicEditor.builtinPlugins.map( plugin => {
+            console.log(plugin.pluginName);
+        });*/
         ClassicEditor
-            .create(document.querySelector('#body'))
+            .create(document.querySelector('#body'),
+                {
+                    removePlugins: [ 'EasyImage','ImageUpload','MediaEmbed' ],
+                })
             .catch(error => {
                 console.error(error);
             });

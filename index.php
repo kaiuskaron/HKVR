@@ -40,25 +40,29 @@ $images = $gallery->fetchThumbs();
                                             <div class="box-icon">
                                                 <i class="icon-star"></i>
                                             </div>
-                                            <p>hinne: <span id="rating_<?= $thumb->id; ?>"><?= round($thumb->rate,1); ?></span></p>
+                                            <p>hinne: <span
+                                                        id="rating_<?= $thumb->id; ?>"><?= round($thumb->rate, 1); ?></span>
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="rating">
                                         <?php
                                         if ($user->isLoggedIn()) {
                                             for ($i = 1; $i < 6; $i++) { ?>
-                                                <label for="rate_<?= $thumb->id.'_'.$i; ?>">
+                                                <label for="rate_<?= $thumb->id . '_' . $i; ?>">
                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                          xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                                          width="32px" height="32px" viewBox="0 0 122.88 116.864"
-                                                         enable-background="new 0 0 122.88 116.864" xml:space="preserve"><g>
-                                                            <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#ffffff" stroke="#000000"
+                                                         enable-background="new 0 0 122.88 116.864"
+                                                         xml:space="preserve"><g>
+                                                            <polygon fill-rule="evenodd" clip-rule="evenodd"
+                                                                     fill="#ffffff" stroke="#000000"
                                                                      points="61.44,0 78.351,41.326 122.88,44.638 88.803,73.491 99.412,116.864 61.44,93.371 23.468,116.864 34.078,73.491 0,44.638 44.529,41.326 61.44,0"/>
                                                         </g>
                                                 </svg>
                                                     <input type="radio" name="rating" value="<?= $i; ?>"
-                                                           id="rate_<?= $thumb->id.'_'.$i; ?>"
-                                                           onchange="rate(<?=$thumb->id.", ".$i;?>)">
+                                                           id="rate_<?= $thumb->id . '_' . $i; ?>"
+                                                           onchange="rate(<?= $thumb->id . ", " . $i; ?>)">
                                                 </label>
                                             <?php }
                                         } ?>
@@ -76,14 +80,24 @@ $images = $gallery->fetchThumbs();
     if (!empty($_POST) && isset($_POST['header'])) {
         $newItem = new NewsItem($_POST);
         if (isset($_POST['edit'])) {
-            $insertResult = $news->update($newItem);
+            $updateResult = $news->update($newItem);
         } else {
             $insertResult = $news->insert($newItem);
         }
         unset($_POST);
     }
 
-    if ($user->isLoggedIn()) { ?>
+    if ($user->isLoggedIn()) {
+        if (isset($insertResult) && $insertResult === 1) { ?>
+            <div class="alert alert-success">Uudis lisatud!</div>
+        <?php } elseif ((isset($insertResult) && $insertResult === -1)) { ?>
+            <div class="alert alert-danger">Viga! Uudist ei lisatud!</div>
+        <?php }
+        if (isset($updateResult) && $updateResult === 1) { ?>
+            <div class="alert alert-success">Uudis mudetud!</div>
+        <?php } elseif ((isset($updateResult) && $updateResult === -1)) { ?>
+            <div class="alert alert-danger">Viga! Uudist ei muudetud!</div>
+        <?php } ?>
         <div class="wrap blog-grid grey">
             <div class="grid grid-pad">
                 <div class="content">
@@ -155,6 +169,7 @@ $images = $gallery->fetchThumbs();
             </div>
         </div>
     <?php } else { ?>
+
         <div class="grid">
             <div class="col-1-1 mt-1">
                 <div class="alert alert-success">Udiste nägemiseks logi palun sisse.<br>Või siis loo uus kasutaja...
