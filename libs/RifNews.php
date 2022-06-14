@@ -19,7 +19,7 @@ class RifNews
         if (isset($_GET['sort'])) {
             $this->sort = intval($_GET['sort']);
         } else {
-            $this->sort = 0;
+            $this->sort = 1;
         }
     }
 
